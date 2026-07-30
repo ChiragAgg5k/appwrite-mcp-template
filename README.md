@@ -4,6 +4,8 @@ Stateless [MCP](https://modelcontextprotocol.io/) server on **Appwrite Functions
 
 Edit [`functions/mcp/src/app.py`](functions/mcp/src/app.py), push with the Appwrite CLI, point your client at the function domain.
 
+![Demo: initialize, list tools, call echo/add against the hosted MCP](docs/assets/demo.gif)
+
 ## Try the demo
 
 ```bash
@@ -34,7 +36,7 @@ appwrite client --endpoint https://cloud.appwrite.io/v1 --project-id <your-proje
 
 # 3. Push
 cp functions/mcp/.env.example functions/mcp/.env
-appwrite --force push functions --with-variables
+appwrite push functions --with-variables
 
 # 4. Domain
 appwrite proxy list-rules
@@ -70,10 +72,10 @@ Do **not** name the tools module `server.py` — Open Runtimes already ships a t
 ## Local development
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/python scripts/dev.py          # http://127.0.0.1:8787
+uv sync
+uv run python scripts/dev.py          # http://127.0.0.1:8787
 ./scripts/smoke.sh http://127.0.0.1:8787
-.venv/bin/pytest -q
+uv run pytest -q
 ```
 
 ## Auth

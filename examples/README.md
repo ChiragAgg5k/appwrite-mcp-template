@@ -3,7 +3,7 @@
 Copy a function body into [`functions/mcp/src/app.py`](../functions/mcp/src/app.py), keep your existing `server = MCPServer(...)`, then:
 
 ```bash
-appwrite --force push functions --with-variables
+appwrite push functions --with-variables
 ```
 
 | File | Shows |

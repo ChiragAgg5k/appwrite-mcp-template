@@ -1,0 +1,17 @@
+[project]
+name = "appwrite-mcp-template"
+version = "0.1.0"
+description = "Stateless MCP server template for Appwrite Functions"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

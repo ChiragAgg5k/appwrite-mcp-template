@@ -54,7 +54,7 @@ Client:
 ## Local development
 
 ```bash
-python scripts/dev.py 8787
+uv run python scripts/dev.py 8787
 ```
 
 ```bash

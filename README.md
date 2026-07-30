@@ -26,9 +26,9 @@ Tools: `echo`, `fetch_url`, `list_users`.
 
 ```bash
 # 1. Point appwrite.config.json at your project
-# 2. Copy env and push (use the regional endpoint for SGP projects)
+# 2. Copy env and push (use the global Cloud endpoint — not a regional one)
 cp functions/mcp/.env.example functions/mcp/.env
-appwrite client --endpoint https://sgp.cloud.appwrite.io/v1 --project-id <your-project>
+appwrite client --endpoint https://cloud.appwrite.io/v1 --project-id <your-project>
 appwrite --force push functions --function-id mcp-example --with-variables
 
 # 3. Get / create the domain
@@ -38,8 +38,6 @@ appwrite proxy list-rules
 # 4. Smoke-test
 ./scripts/smoke.sh https://mcp-example.sgp.appwrite.run
 ```
-
-> **SGP note:** Console OAuth tokens need `X-Appwrite-Mode: admin` (the CLI usually sets this after `appwrite login`). If `push` fails with “not accessible in this region”, set `--endpoint https://sgp.cloud.appwrite.io/v1` and ensure you’re logged into the account that owns the project.
 
 ## Add your own tools
 

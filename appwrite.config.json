@@ -1,0 +1,22 @@
+{
+  "projectId": "chirag-project-prod",
+  "projectName": "Main Project",
+  "endpoint": "https://sgp.cloud.appwrite.io/v1",
+  "functions": [
+    {
+      "$id": "mcp-example",
+      "name": "Hosted MCP Example",
+      "runtime": "python-3.12",
+      "path": "functions/mcp",
+      "entrypoint": "src/main.py",
+      "commands": "pip install -r requirements.txt",
+      "execute": ["any"],
+      "scopes": ["users.read"],
+      "timeout": 30,
+      "enabled": true,
+      "logging": true,
+      "buildSpecification": "s-2vcpu-2gb",
+      "runtimeSpecification": "s-2vcpu-2gb"
+    }
+  ]
+}

@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Stateless MCP server template for Appwrite Functions"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "mcp==2.0.0",
+]
 
 [dependency-groups]
 dev = [

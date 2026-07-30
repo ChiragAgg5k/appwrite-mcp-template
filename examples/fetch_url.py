@@ -12,7 +12,7 @@ import urllib.request
 from typing import Any
 
 # Assumes `server` is already defined in app.py:
-#   from mcp_lite import MCPServer
+#   from mcp.server.mcpserver import MCPServer
 #   server = MCPServer(...)
 
 

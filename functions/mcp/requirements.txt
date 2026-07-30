@@ -1,2 +1,1 @@
-# Stdlib-only by default. Add packages here if your tools need them.
-# Example: appwrite>=11.0.0
+mcp==2.0.0

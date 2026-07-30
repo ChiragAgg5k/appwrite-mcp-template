@@ -17,8 +17,10 @@ import urllib.parse
 import urllib.request
 from typing import Any
 
+from mcp.server.mcpserver import Context
+
 # Assumes `server` is already defined in app.py:
-#   from mcp_lite import MCPServer
+#   from mcp.server.mcpserver import MCPServer
 #   server = MCPServer(...)
 
 
@@ -28,9 +30,9 @@ from typing import Any
         "(requires scopes: users.read). Optional search filters by name/email."
     )
 )
-def list_users(context, limit: int = 25, search: str | None = None) -> dict[str, Any]:
+def list_users(ctx: Context, limit: int = 25, search: str | None = None) -> dict[str, Any]:
     limit = max(1, min(int(limit), 100))
-    headers = context.req.headers or {}
+    headers = ctx.headers or {}
     api_key = headers.get("x-appwrite-key") or os.environ.get("APPWRITE_API_KEY")
     project = (
         headers.get("x-appwrite-project")

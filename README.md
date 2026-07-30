@@ -1,6 +1,6 @@
 # Appwrite Hosted MCP Template
 
-Stateless [MCP](https://modelcontextprotocol.io/) server on **Appwrite Functions** — JSON-RPC over HTTPS, stdlib only. No SSE, no ASGI stack.
+Stateless [MCP](https://modelcontextprotocol.io/) server on **Appwrite Functions** — official Python SDK (`mcp==2.0.0`), JSON-RPC over HTTPS. No SSE sessions.
 
 Edit [`functions/mcp/src/app.py`](functions/mcp/src/app.py), push with the Appwrite CLI, point your client at the function domain.
 
@@ -56,7 +56,7 @@ claude mcp add --transport http my-mcp https://<your-domain>
 
 ```python
 # functions/mcp/src/app.py
-from mcp_lite import MCPServer
+from mcp.server.mcpserver import MCPServer
 
 server = MCPServer(name="my-mcp", version="0.1.0")
 
@@ -65,7 +65,17 @@ def my_tool(query: str) -> str:
     return f"got: {query}"
 ```
 
-Type hints become the tool `inputSchema`. Add a `context` parameter to read the Appwrite request (headers, dynamic API key). More patterns in [`examples/`](examples/).
+Type hints become the tool `inputSchema` (and return annotations become `outputSchema`). Add a `ctx: Context` parameter to read inbound HTTP headers (including Appwrite's dynamic API key):
+
+```python
+from mcp.server.mcpserver import Context
+
+@server.tool(description="...")
+def whoami(ctx: Context) -> dict:
+    return {"api_key": (ctx.headers or {}).get("x-appwrite-key")}
+```
+
+More patterns in [`examples/`](examples/).
 
 Do **not** name the tools module `server.py` — Open Runtimes already ships a top-level `server` module.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local HTTP server wrapping the same Appwrite MCP handler (stdlib only)."""
+"""Local HTTP server wrapping the same Appwrite MCP handler."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "functions" / "mcp" / "src"
 sys.path.insert(0, str(SRC))
 
-from mcp_lite import handle_http  # noqa: E402
 from app import server  # noqa: E402
+from appwrite_mcp import handle_http  # noqa: E402
 
 
 class FakeRes:
@@ -36,11 +36,16 @@ class FakeRes:
 class FakeReq:
     def __init__(self, handler: BaseHTTPRequestHandler, body: bytes):
         self.method = handler.command
-        self.path = handler.path.split("?", 1)[0]
+        path_raw = handler.path
+        self.path = path_raw.split("?", 1)[0]
         self.headers = {k.lower(): v for k, v in handler.headers.items()}
         self.body_binary = body
         self.query = {}
         self.query_string = ""
+        self.scheme = "http"
+        host_hdr = self.headers.get("host", "127.0.0.1")
+        self.host = host_hdr.split(":")[0]
+        self.port = int(host_hdr.split(":")[1]) if ":" in host_hdr else 80
 
     @property
     def body_text(self):

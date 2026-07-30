@@ -11,11 +11,15 @@ from __future__ import annotations
 
 import os
 
-from mcp_lite import MCPServer
+from mcp.server.mcpserver import MCPServer
 
 server = MCPServer(
     name=os.environ.get("MCP_SERVER_NAME") or "appwrite-hosted-mcp",
     version="0.1.0",
+    instructions=(
+        "Stateless MCP on Appwrite Functions. "
+        "Tools must finish within ~25s (30s domain hard-cap)."
+    ),
 )
 
 

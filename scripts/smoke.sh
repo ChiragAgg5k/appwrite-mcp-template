@@ -53,6 +53,17 @@ CALL=$(post '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"ech
 echo "$CALL"
 echo "$CALL" | grep -q 'pong' || { echo "FAIL: echo mismatch"; exit 1; }
 
+echo "== modern tools/list (2026-07-28 envelope) =="
+MODERN=$(curl -sS -X POST -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "MCP-Protocol-Version: 2026-07-28" \
+  -H "MCP-Method: tools/list" \
+  -d '{"jsonrpc":"2.0","id":4,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{}}}}' \
+  "$URL")
+echo "$MODERN" | head -c 800
+echo
+echo "$MODERN" | grep -q '"tools"' || { echo "FAIL: modern tools/list"; exit 1; }
+
 echo "== GET (expect 405) =="
 GCODE=$(curl -sS -o /dev/null -w "%{http_code}" "$URL")
 echo "status=$GCODE"

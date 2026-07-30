@@ -1,45 +1,56 @@
 # Appwrite Hosted MCP Template
 
-Stateless [MCP](https://modelcontextprotocol.io/) server that runs on **Appwrite Functions** — JSON-RPC over HTTPS, no SSE, no ASGI stack.
+Stateless [MCP](https://modelcontextprotocol.io/) server on **Appwrite Functions** — JSON-RPC over HTTPS, stdlib only. No SSE, no ASGI stack.
 
-Edit [`functions/mcp/src/app.py`](functions/mcp/src/app.py), push with the Appwrite CLI, paste the function domain into Cursor/`mcp.json`.
+Edit [`functions/mcp/src/app.py`](functions/mcp/src/app.py), push with the Appwrite CLI, point your client at the function domain.
 
-## Live example
+## Try the demo
 
-Deployed to project `chirag-project-prod` (sgp):
+```bash
+claude mcp add --transport http appwrite-mcp-demo https://mcp-example.sgp.appwrite.run
+```
 
-**https://mcp-example.sgp.appwrite.run**
+Or in Cursor / Claude Desktop `mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "appwrite-hosted": {
+    "appwrite-mcp-demo": {
       "url": "https://mcp-example.sgp.appwrite.run"
     }
   }
 }
 ```
 
-Tools: `echo`, `fetch_url`, `list_users`.
+Demo tools: `echo`, `add`.
 
-## Quickstart
+## Deploy your own
 
 ```bash
-# 1. Point appwrite.config.json at your project
-# 2. Copy env and push (use the global Cloud endpoint — not a regional one)
-cp functions/mcp/.env.example functions/mcp/.env
+# 1. Point the CLI at your project (global Cloud endpoint — not regional)
 appwrite client --endpoint https://cloud.appwrite.io/v1 --project-id <your-project>
-appwrite --force push functions --function-id mcp-example --with-variables
 
-# 3. Get / create the domain
+# 2. Edit appwrite.config.json → set projectId to yours
+
+# 3. Push
+cp functions/mcp/.env.example functions/mcp/.env
+appwrite --force push functions --with-variables
+
+# 4. Domain
 appwrite proxy list-rules
-# or: appwrite proxy create-function-rule --domain mcp-example.sgp.appwrite.run --function-id mcp-example
+# or: appwrite proxy create-function-rule --domain <name>.<region>.appwrite.run --function-id mcp-example
 
-# 4. Smoke-test
-./scripts/smoke.sh https://mcp-example.sgp.appwrite.run
+# 5. Smoke-test
+./scripts/smoke.sh https://<your-domain>
 ```
 
-## Add your own tools
+Then add the domain the same way as the demo:
+
+```bash
+claude mcp add --transport http my-mcp https://<your-domain>
+```
+
+## Write a tool
 
 ```python
 # functions/mcp/src/app.py
@@ -51,6 +62,8 @@ server = MCPServer(name="my-mcp", version="0.1.0")
 def my_tool(query: str) -> str:
     return f"got: {query}"
 ```
+
+Type hints become the tool `inputSchema`. Add a `context` parameter to read the Appwrite request (headers, dynamic API key). More patterns in [`examples/`](examples/).
 
 Do **not** name the tools module `server.py` — Open Runtimes already ships a top-level `server` module.
 
@@ -70,10 +83,10 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
 | Open (default) | `MCP_AUTH_MODE=none` | none |
 | Bearer | `MCP_AUTH_MODE=bearer` + `MCP_AUTH_TOKEN=...` | `Authorization: Bearer ...` |
 
-## Constraints (Functions)
+## Limits
 
 - **30s** hard timeout on domain executions — keep tools under ~25s (`MCP_TOOL_TIMEOUT`)
-- **No SSE** — one JSON response per request (spec-compliant Streamable HTTP JSON mode)
+- **No SSE** — one JSON response per request (Streamable HTTP JSON mode)
 - **Stateless** — no sessions, no progress streaming, no sampling
 
 See [docs/design.md](docs/design.md) and [docs/clients.md](docs/clients.md).

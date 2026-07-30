@@ -1,5 +1,18 @@
 # Client configuration
 
+## Claude Code / Claude CLI
+
+```bash
+claude mcp add --transport http my-mcp https://<your-function>.appwrite.run
+```
+
+With bearer auth:
+
+```bash
+claude mcp add --transport http my-mcp https://<your-function>.appwrite.run \
+  --header "Authorization: Bearer your-long-random-secret"
+```
+
 ## Cursor / Claude Desktop — remote Streamable HTTP
 
 After deploy, put the Function domain in `mcp.json`:
@@ -7,8 +20,8 @@ After deploy, put the Function domain in `mcp.json`:
 ```json
 {
   "mcpServers": {
-    "appwrite-hosted": {
-      "url": "https://mcp-example.sgp.appwrite.run"
+    "my-mcp": {
+      "url": "https://<your-function>.appwrite.run"
     }
   }
 }
@@ -28,8 +41,8 @@ Client:
 ```json
 {
   "mcpServers": {
-    "appwrite-hosted": {
-      "url": "https://mcp-example.sgp.appwrite.run",
+    "my-mcp": {
+      "url": "https://<your-function>.appwrite.run",
       "headers": {
         "Authorization": "Bearer your-long-random-secret"
       }
@@ -44,10 +57,14 @@ Client:
 python scripts/dev.py 8787
 ```
 
+```bash
+claude mcp add --transport http my-mcp-local http://127.0.0.1:8787
+```
+
 ```json
 {
   "mcpServers": {
-    "appwrite-hosted-local": {
+    "my-mcp-local": {
       "url": "http://127.0.0.1:8787"
     }
   }
@@ -61,11 +78,11 @@ For clients that only speak stdio MCP:
 ```json
 {
   "mcpServers": {
-    "appwrite-hosted": {
+    "my-mcp": {
       "command": "python",
       "args": ["/absolute/path/to/scripts/bridge.py"],
       "env": {
-        "MCP_URL": "https://mcp-example.sgp.appwrite.run",
+        "MCP_URL": "https://<your-function>.appwrite.run",
         "MCP_AUTH_TOKEN": ""
       }
     }
@@ -76,5 +93,5 @@ For clients that only speak stdio MCP:
 ## Smoke test
 
 ```bash
-./scripts/smoke.sh https://mcp-example.sgp.appwrite.run
+./scripts/smoke.sh https://<your-function>.appwrite.run
 ```

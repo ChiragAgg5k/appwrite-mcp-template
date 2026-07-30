@@ -96,11 +96,15 @@ def list_users(context, limit: int = 25, search: str | None = None) -> dict[str,
     if not project:
         raise RuntimeError("Missing project id (x-appwrite-project / APPWRITE_FUNCTION_PROJECT_ID).")
 
-    # Appwrite REST Query encoding: limit(N)
-    q_limit = urllib.parse.quote(f"limit({limit})")
+    # Appwrite Query encoding (JSON): Query.limit(N) → {"method":"limit","values":[N]}
+    # Keep the literal `queries[]` key — urllib.urlencode would turn [] into %5B%5D and break parsing.
+    q_limit = urllib.parse.quote(
+        json.dumps({"method": "limit", "values": [limit]}, separators=(",", ":")),
+        safe="",
+    )
     url = f"{endpoint}/users?queries[]={q_limit}"
     if search:
-        url += f"&search={urllib.parse.quote(search)}"
+        url += f"&search={urllib.parse.quote(search, safe='')}"
 
     req = urllib.request.Request(
         url,

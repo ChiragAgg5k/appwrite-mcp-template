@@ -10,13 +10,18 @@
       "path": "functions/mcp",
       "entrypoint": "src/main.py",
       "commands": "pip install -r requirements.txt",
-      "execute": ["any"],
-      "scopes": ["users.read"],
+      "execute": [
+        "any"
+      ],
+      "scopes": [
+        "users.read"
+      ],
       "timeout": 30,
       "enabled": true,
       "logging": true,
       "buildSpecification": "s-2vcpu-2gb",
-      "runtimeSpecification": "s-2vcpu-2gb"
+      "runtimeSpecification": "s-2vcpu-2gb",
+      "deploymentRetention": 0
     }
   ]
 }

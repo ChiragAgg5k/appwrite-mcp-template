@@ -1,7 +1,7 @@
 {
     "projectId": "chirag-project-prod",
     "projectName": "Main Project",
-    "endpoint": "https://cloud.appwrite.io/v1",
+    "endpoint": "https://sgp.cloud.appwrite.io/v1",
     "functions": [
         {
             "$id": "mcp-example",
